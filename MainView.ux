@@ -2,10 +2,59 @@
 	<!-- <ClientPanel>
 		<JavaScript File="MainView.js" />
 	</ClientPanel> -->
+	<JavaScript>
+		var Observable = require('FuseJS/Observable');
+		var show_scanner = Observable(false);
+		var code = Observable();
+		code.addSubscriber(function () {
+			console.log("scanned code: " + code.value);
+			if (code.value != undefined) {
+				show_scanner.value = false;
+			}
+		});
+
+		function press () {
+			console.log("button pressed");
+			show_scanner.value = true;
+		}
+
+		module.exports = {
+			code: code,
+			press: press,
+			show_scanner: show_scanner
+		}
+	</JavaScript>
 	<DockPanel>
-        <BarcodeScanner>
-            <BarcodeScannerImpl />
-        </BarcodeScanner>
+        <LinearGradient StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="#CED6DE" />
+            <GradientStop Offset="1" Color="#93ADBD" />
+        </LinearGradient>
+		<StatusBarBackground Dock="Top" />
+		<Panel Alignment="Top" Height="50" ux:Name="ledge">
+            <Text Alignment="Center" TextAlignment="Center" TextColor="#fff" Value="Top Bar" />
+            <Rectangle Fill="#000" />
+        </Panel>
+        <StackPanel>
+        <Panel Height="200" Width="100%">
+        	<WhileTrue Value="{show_scanner}">
+        		<Text Alignment="Center" TextAlignment="Center" TextColor="#fff" Value="Scanner" />
+
+        		<BarcodeScanner Code="{code}" Height="200" Width="100%">
+            		<BarcodeScannerImpl />
+    	    	</BarcodeScanner>
+	    	</WhileTrue>
+    	</Panel>
+        <Panel>
+		<ScrollView ClipToBounds="true">
+        	<ScrollingAnimation From="0" To="50">
+                <Change ledge.Opacity="0" />
+            </ScrollingAnimation>
+            <StackPanel Margin="0,50,0,0" Padding="20">
+                <Button Text="Load Scanner" Clicked="{press}"/>
+            </StackPanel>
+        </ScrollView>
+		</Panel>
+        </StackPanel>
 	</DockPanel>
 </App>
 

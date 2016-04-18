@@ -33,6 +33,7 @@ public class BarcodeScannerImpl : Fuse.iOS.Controls.Control<BarcodeScanner>
 		return s;
 	@}
 
+	[Require("Entity","BarcodeScannerImpl.Scanned(string)")]
 	[Foreign(Language.ObjC)]
 	extern(iOS) void StartImpl(ObjC.ID s)
 	@{
@@ -42,6 +43,7 @@ public class BarcodeScannerImpl : Fuse.iOS.Controls.Control<BarcodeScanner>
 		        [s startScanningWithResultBlock:^(NSArray *codes) {
 		            AVMetadataMachineReadableCodeObject *code = [codes firstObject];
 		            NSLog(@"Found code: %@", code.stringValue);
+		            @{BarcodeScannerImpl:Of(_this).Scanned(string):Call(code.stringValue)};
 
 		            [s stopScanning];
 		        }];
@@ -52,11 +54,15 @@ public class BarcodeScannerImpl : Fuse.iOS.Controls.Control<BarcodeScanner>
 		}];
 	@}
 
+	public void Scanned (string scanned) {
+		SemanticControl.SetCode(scanned, this);
+	}
 
 	protected override void Attach()
 	{
 		// CreateInternal();
 		StartImpl(scanner);
+		debug_log "Started scanner";
 	}
 
 	protected override void Detach()
