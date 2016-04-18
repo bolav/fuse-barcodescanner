@@ -9,26 +9,54 @@ using Uno.Compiler.ExportTargetInterop;
 extern (iOS)
 public class BarcodeScannerImpl : Fuse.iOS.Controls.Control<BarcodeScanner>
 {
+	ObjC.ID previewView;
+	ObjC.ID scanner;
 	internal override UIView CreateInternal()
 	{
-		var id = CreateImpl();
-		iOS.UIKit.UIView v = new iOS.UIKit.UIView(id);
+		previewView = CreatePreviewView();
+		scanner = CreateImpl(previewView);
+		iOS.UIKit.UIView v = new iOS.UIKit.UIView(previewView);
 		return v;
 	}
 
 	[Foreign(Language.ObjC)]
-	extern(iOS) ObjC.ID CreateImpl()
+	extern(iOS) ObjC.ID CreatePreviewView()
 	@{
-		UIView *previewView = [UIApplication sharedApplication].keyWindow;
-
-		NSLog(@"This is it: %@", @"This is my string text!");
-		[[MTBBarcodeScanner alloc] initWithPreviewView:previewView];
-		return previewView;
+		return [[UIView alloc] init];
 	@}
+
+	[Foreign(Language.ObjC)]
+	extern(iOS) ObjC.ID CreateImpl(ObjC.ID previewView)
+	@{
+		NSLog(@"This is it: %@", @"This is my string text!");
+		MTBBarcodeScanner *s = [[MTBBarcodeScanner alloc] initWithPreviewView:previewView];
+		return s;
+	@}
+
+	[Foreign(Language.ObjC)]
+	extern(iOS) void StartImpl(ObjC.ID s)
+	@{
+		[MTBBarcodeScanner requestCameraPermissionWithSuccess:^(BOOL success) {
+		    if (success) {
+
+		        [s startScanningWithResultBlock:^(NSArray *codes) {
+		            AVMetadataMachineReadableCodeObject *code = [codes firstObject];
+		            NSLog(@"Found code: %@", code.stringValue);
+
+		            [s stopScanning];
+		        }];
+
+		    } else {
+		    	NSLog(@"The user denied access to the camera");
+		    }
+		}];
+	@}
+
 
 	protected override void Attach()
 	{
 		// CreateInternal();
+		StartImpl(scanner);
 	}
 
 	protected override void Detach()

@@ -77,7 +77,7 @@ static const NSInteger kErrorCodeSessionIsClosed = 1001;
  camera input when scanning starts. When scanning stops, the layer is
  removed.
  */
-@property (nonatomic, weak) UIView *previewView;
+@property (nonatomic, assign) UIView *previewView;
 
 /*!
  @property hasExistingSession
