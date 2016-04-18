@@ -24,15 +24,14 @@
         "FuseCore",
         "Uno.Collections",
         "Uno.Geometry",
-        "Fuse.Camera"
+        "Fuse.Camera",
+        "Experimental.iOS"
   ],
   "Includes": [
     "*.uno",
     "*.ux",
     "MTBBarcodeScanner.h:ObjCHeader:iOS",
-    "MTBBarcodeScanner.mm:ObjCSource:iOS",
-    "MTBBasicExampleViewController.h:ObjCHeader:iOS",
-    "MTBBasicExampleViewController.mm:ObjCSource:iOS"
+    "MTBBarcodeScanner.mm:ObjCSource:iOS"
 
 
   ]
