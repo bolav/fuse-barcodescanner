@@ -11,10 +11,10 @@
 
 @interface MTBBasicExampleViewController () <UITableViewDataSource>
 
-@property (nonatomic, weak) IBOutlet UIView *previewView;
-@property (nonatomic, weak) IBOutlet UIButton *toggleScanningButton;
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *toggleTorchButton;
+@property (nonatomic, assign) IBOutlet UIView *previewView;
+@property (nonatomic, assign) IBOutlet UIButton *toggleScanningButton;
+@property (nonatomic, assign) IBOutlet UITableView *tableView;
+@property (nonatomic, assign) IBOutlet UIBarButtonItem *toggleTorchButton;
 
 @property (nonatomic, strong) MTBBarcodeScanner *scanner;
 @property (nonatomic, strong) NSMutableArray *uniqueCodes;

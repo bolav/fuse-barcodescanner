@@ -26,7 +26,23 @@ public class BarcodeScanner : NativeModule {
 		UIView *previewView = [UIApplication sharedApplication].keyWindow;
 
 		NSLog(@"This is it: %@", @"This is my string text!");
-		[[MTBBarcodeScanner alloc] initWithPreviewView:previewView];
+		MTBBarcodeScanner *s = [[MTBBarcodeScanner alloc] initWithPreviewView:previewView];
+		[MTBBarcodeScanner requestCameraPermissionWithSuccess:^(BOOL success) {
+		    if (success) {
+
+		        [s startScanningWithResultBlock:^(NSArray *codes) {
+		            AVMetadataMachineReadableCodeObject *code = [codes firstObject];
+		            NSLog(@"Found code: %@", code.stringValue);
+
+		            [s stopScanning];
+		        }];
+
+		    } else {
+		    	NSLog(@"The user denied access to the camera");
+		        // The user denied access to the camera
+		    }
+		}];
+
 	@}
 	static extern(!iOS) void Scanner(){
 		debug_log("Barcode Scanner is not supported on this platform");
