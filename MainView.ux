@@ -1,0 +1,38 @@
+<App Theme="Basic">
+	<!-- <ClientPanel>
+		<JavaScript File="MainView.js" />
+	</ClientPanel> -->
+	<DockPanel>
+        <LinearGradient StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Offset="0" Color="#CED6DE" />
+            <GradientStop Offset="1" Color="#93ADBD" />
+        </LinearGradient>
+
+		<StatusBarBackground Dock="Top" />
+		<Panel Alignment="Top" Height="50" ux:Name="ledge">
+            <Text Alignment="Center" TextAlignment="Center" TextColor="#fff" Value="Top Bar" />
+            <Rectangle Fill="#000" />
+        </Panel>
+        <BarcodeScanner ux:Global="BarcodeScanner"/>
+        <JavaScript>
+        	var BarcodeScanner = require("BarcodeScanner");
+        	function press(){
+        		BarcodeScanner.scanner();
+        	}
+        	module.exports = {
+        		"press": press
+        	};
+        </JavaScript>
+		<Panel>
+		<ScrollView ClipToBounds="true">
+        	<ScrollingAnimation From="0" To="50">
+                <Change ledge.Opacity="0" />
+            </ScrollingAnimation>
+            <StackPanel Margin="0,50,0,0" Padding="20">
+                <Button Text="Load Scanner" Clicked="{press}"/>
+            </StackPanel>
+        </ScrollView>
+		</Panel>
+	</DockPanel>
+</App>
+
